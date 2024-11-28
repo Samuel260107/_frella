@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             // Verifica o tipo de arquivo
             if (in_array(strtolower($file_extension), $allowed_extensions)) {
-                $upload_dir = $_SERVER['DOCUMENT_ROOT'] . '/frella/assets/img/posts/';
+                $upload_dir = $_SERVER['DOCUMENT_ROOT'] . '/_frella/assets/img/posts/';
                 $new_filename = uniqid() . '.' . $file_extension;
                 $upload_path = $upload_dir . $new_filename;
 

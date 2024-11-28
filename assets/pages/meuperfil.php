@@ -1,5 +1,5 @@
 <?php global $user; 
-require_once $_SERVER['DOCUMENT_ROOT'] . '/frella/assets/php/functions.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/_frella/assets/php/functions.php';
 $posts = getPost1();
 ?>
 <style>

@@ -15,7 +15,7 @@
                 </div>
             </div>
             <div class="p2">
-                <a href=""><img class="img1" src="/_frella/assets/img/navbar/perfil.png" alt=""></a>
+                <a href="?meuperfill"><img class="img1" src="/_frella/assets/img/navbar/perfil.png" alt=""></a>
                 <a href="" id="addPostBtn">
                     <img class="img2" src="/_frella/assets/img/navbar/mais.png"></img>
                 </a>
