@@ -5,14 +5,9 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// Verifica autenticação do usuário
 if (isset($_SESSION['Auth'])) {
     $user = getUser($_SESSION['userdata']['id']);
-} else {
-    showPage('login'); // Redireciona para a página de login
-    exit();
-}
-
+} 
 // Verifica as páginas baseadas nos parâmetros na URL
 $pagecount = count($_GET);
 
@@ -33,7 +28,6 @@ if (isset($_SESSION['Auth'])) {
     }
     if (!$pagecount || isset($_GET['home'])) {
         showPage('navbar');
-        showPage('fundohome');
         showPage('wall');
         exit();
     }
