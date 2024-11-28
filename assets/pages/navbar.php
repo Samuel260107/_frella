@@ -21,7 +21,7 @@
                 </a>
                 <a href=""><img class="img3" src="/_frella/assets/img/navbar/conversas.png"></img></a>
                 <a href="#"><img class="img4" src="/_frella/assets/img/navbar/sino.png"></a>
-                <a href=""><img class="img5" src="/_frella/assets/img/navbar/logo.png"></img></a>
+                <a href="?home"><img class="img5" src="/_frella/assets/img/navbar/logo.png"></img></a>
             </div>
         </header>
         <div id="postForm" class="post-form hidden">

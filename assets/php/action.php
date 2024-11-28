@@ -84,7 +84,7 @@ if (isset($_GET['meuperfil']) && $_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!empty($age) && !empty($job) && !empty($bio)) {
         $updateStatus = updateProfile1($_POST, $_FILES['profile_pic'], $_FILES['fundo_pic']);
         if ($updateStatus) {
-            header('Location: ../../?meuperfil');
+            header('Location: ../../?meuperfill');
             exit();
         } else {
             echo "Erro ao atualizar o perfil.";
