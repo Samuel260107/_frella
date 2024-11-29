@@ -1,7 +1,7 @@
 <?php 
 global $user; 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/_frella/assets/php/functions.php';
-// $posts = getPost();
+$posts = getPost();
 $users = getUsers();
 ?>
 
@@ -63,11 +63,17 @@ $users = getUsers();
 
     <div class="profiles">
         <a href="?meuperfill">
-            <div>
-                <img src="assets/img/profile/<?= $user['profile_pic'] ?>" alt="Foto de perfil" width="50">
+            <div class="nj">
+                <img src="assets/img/profile/<?= $user['profile_pic'] ?>" alt="Foto de perfil" width="70" class="suafoto">
+                <p class="nj1">
+                <p class="nj2">
                 <?= $user['first_name'] ?> <?= $user['last_name'] ?>
+                </p>
+                <p class="nj3">
+                @<?= $user['username'] ?>
+                </p>
+        </p>
             </div>
-            <div>@<?= $user['username'] ?></div>
         </a>
 
         <?php if (!empty($users)): ?>
@@ -75,20 +81,22 @@ $users = getUsers();
                 <?php if ($profile_user['id'] !== $user['id']): ?>
                     <a href="?profile=<?= $profile_user['id'] ?>">
                         <div class="profile-container">
-                            <img src="assets/img/profile/<?= $profile_user['profile_pic'] ?>" alt="Foto de perfil" width="50">
-                            <div>
+                            <img src="assets/img/profile/<?= $profile_user['profile_pic'] ?>" alt="Foto de perfil" width="50" height="50">
+                            <div class="bp">
+                                <div class="bp1">
                                 <strong><?= $profile_user['first_name'] . ' ' . $profile_user['last_name'] ?></strong>
                                 <p>@<?= $profile_user['username'] ?></p>
+                </div>
 
                                 <?php if (isFollowing($user['id'], $profile_user['id'])): ?>
                                     <form action="assets/php/action.php?unfollow" method="POST">
                                         <input type="hidden" name="following_id" value="<?= $profile_user['id'] ?>">
-                                        <button type="submit">Deixar de Seguir</button>
+                                        <button class="btns" type="submit"><img class="imgseguir" src="assets/img/profile/seguir2.png"></button>
                                     </form>
                                 <?php else: ?>
                                     <form action="assets/php/action.php?follow" method="POST">
                                         <input type="hidden" name="following_id" value="<?= $profile_user['id'] ?>">
-                                        <button type="submit">Seguir</button>
+                                        <button class="btnd" type="submit"><img class="imgseguir" src="assets/img/profile/deixardeseguir2.png"></button>
                                     </form>
                                 <?php endif; ?>
                             </div>
@@ -137,8 +145,49 @@ $users = getUsers();
 </script>
 
 <style>
+    .bp{
+        display: flex;
+    }
+    .btns{
+        border: none;
+        width: 50px;
+        background-color: rgba(217, 217, 217, 0);
+    }
+    .btnd{
+        border: none;
+        width: 50px;
+        background-color: rgba(217, 217, 217, 0);
+    }
+    .btnd img{
+        width: 50px;
+    }
+    .btns img{
+      width: 50px;
+    }
+    .nj{
+        display: flex;
+        align-items: center;
+        padding: 10px;
+    }
+    .nj1{
+        margin-left: 10px
+    }
+    .nj2{
+        color: white;
+        font-family: Inter;
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 36.31px;
+    text-align: left;
+    text-underline-position: from-font;
+    text-decoration-skip-ink: none;
+
+    }
     html{
         background-color: #FFA609;
+    }
+    .suafoto{
+        border-radius: 50%;
     }
     .content-wrapper {
         display: flex;
@@ -149,7 +198,12 @@ $users = getUsers();
         margin-right: 20px;
     }
     .profiles {
-        flex: 1;
+        flex: 1.3;
+        padding: 30px;
+        background-color: rgba(217, 217, 217, 0.5); /* Ajuste da opacidade para 50% */
+        height: 50%;
+        border: #fff solid 4px;
+        border-radius: 30px 0px 30px 0px;
     }
     .post-container, .profile-container {
         margin-bottom: 20px;

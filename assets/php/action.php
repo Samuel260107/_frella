@@ -64,6 +64,32 @@ if (isset($_GET['unfollow'])) {
     }
     exit();
 }
+if (isset($_GET['unfollow1'])) {
+    $follower_id = $_SESSION['userdata']['id'];
+    $following_id = $_POST['following_id'];
+
+    if (unfollowUser($follower_id, $following_id)) {
+        // Redireciona para o perfil do usuário após deixar de seguir
+        header("Location: ../../?profile=" . $following_id);
+        exit();
+    } else {
+        header("Location: /wall.php?msg=Erro ao deixar de seguir");
+        exit();
+    }
+}
+
+if (isset($_GET['follow1'])) {
+    $follower_id = $_SESSION['userdata']['id'];
+    $following_id = $_POST['following_id'];
+
+    if (followUser($follower_id, $following_id)) {
+        header("Location: ../../?profile=" . $following_id);
+    } else {
+        header("Location: /wall.php?msg=Já segue este usuário");
+    }
+    exit();
+}
+
 
 if (isset($_GET['perfil']) && $_SERVER['REQUEST_METHOD'] === 'POST') {
     $updateStatus = updateProfile($_POST, $_FILES['profile_pic']);

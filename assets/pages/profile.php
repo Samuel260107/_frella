@@ -31,24 +31,24 @@ if (isset($_GET['profile'])) {
             <div class="seguidos">
                 <!-- Botão para seguir ou deixar de seguir -->
                 <?php if ($user['id'] !== $userId): // Exibe o botão apenas se o perfil não for o do próprio usuário ?>
-                <?php if ($isFollowing): ?>
-                    <form action="assets/php/action.php?unfollow1" method="POST">
-                        <img class="imgdeixar" src="assets/img/profile/deixardeseguir1.png">
-                        <button class="botdeixar" type="submit">
-                        <img class="imgdeixar" src="assets/img/profile/deixardeseguir1.png">
-                        </button>
-                    </form>
-                <?php else: ?>
-                    <form action="assets/php/action.php?follow1" method="POST">
-                        <input type="hidden" name="following_id" value="<?= $userId ?>">
-                        <button class="botseguir" type="submit">
-                            <img class="imgseguir" src="assets/img/profile/seguir1.png">
-                        </button>
-                    </form>
-                <?php endif; ?>
-                <?php endif; ?>
+<?php if ($isFollowing): ?>
+    <form action="assets/php/action.php?unfollow1" method="POST">
+        <input type="hidden" name="following_id" value="<?= $userId ?>"> <!-- Passa o ID do perfil a ser deixado de seguir -->
+        <button class="botdeixar" type="submit">
+            <img class="imgdeixar" src="assets/img/profile/deixardeseguir1.png">
+        </button>
+    </form>
+<?php else: ?>
+    <form action="assets/php/action.php?follow1" method="POST">
+        <input type="hidden" name="following_id" value="<?= $userId ?>">
+        <button class="botseguir" type="submit">
+            <img class="imgseguir" src="assets/img/profile/seguir1.png">
+        </button>
+    </form>
+<?php endif; ?>
+<?php endif; ?>
                 <!-- Link para visualizar seguidores -->
-                <p><a class="seguidores" href="followers.php?user_id=<?= $userId ?>"><?= count($followers) ?> Seguidores</a></p>
+                <p><a class="seguidores" href="?followers.php?user_id=<?= $userId ?>"><?= count($followers) ?> Seguidores</a></p>
             </div>
         </div>
         <div class="perfil2">

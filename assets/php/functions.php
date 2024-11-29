@@ -182,26 +182,27 @@ function createPost($post_text, $post_img, $post_type) {
     return mysqli_stmt_execute($stmt);
 }
 }
-
-// function getPost($post_type = null) {
-//     global $db;
+if (!function_exists('getPost')){
+function getPost($post_type = null) {
+    global $db;
     
-//     // Inicia a query básica
-//     $query = "SELECT users.id as uid, posts.id, posts.user_id, posts.post_img, posts.post_text, posts.created_at, users.first_name, users.last_name, users.username, users.profile_pic, posts.post_type 
-//               FROM posts 
-//               JOIN users ON users.id = posts.user_id";
+    // Inicia a query básica
+    $query = "SELECT users.id as uid, posts.id, posts.user_id, posts.post_img, posts.post_text, posts.created_at, users.first_name, users.last_name, users.username, users.profile_pic, posts.post_type 
+              FROM posts 
+              JOIN users ON users.id = posts.user_id";
     
-//     // Se o tipo de post for fornecido, adiciona a condição WHERE
-//     if ($post_type) {
-//         $query .= " WHERE posts.post_type = '$post_type'";
-//     }
+    // Se o tipo de post for fornecido, adiciona a condição WHERE
+    if ($post_type) {
+        $query .= " WHERE posts.post_type = '$post_type'";
+    }
 
-//     // Ordenar por mais recente
-//     $query .= " ORDER BY posts.id DESC";
+    // Ordenar por mais recente
+    $query .= " ORDER BY posts.id DESC";
 
-//     $run = mysqli_query($db, $query);
-//     return mysqli_fetch_all($run, true);
-// }
+    $run = mysqli_query($db, $query);
+    return mysqli_fetch_all($run, true);
+}
+}
 if (!function_exists('getPost1')) {
 function getPost1($post_type = null) {
     global $db;

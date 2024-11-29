@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if (move_uploaded_file($image['tmp_name'], $upload_path)) {
                     // Função para criar o post
                     if (createPost($post_text, $new_filename, $post_type)) {
-                        header("Location: http://localhost/frella/?home"); // Redireciona para a home após o sucesso
+                        header("Location: http://localhost/_frella/?home"); // Redireciona para a home após o sucesso
                         exit();
                     } else {
                         echo "Algo deu errado ao adicionar o post.";
