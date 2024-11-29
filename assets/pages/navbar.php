@@ -51,8 +51,9 @@
         </script>
     </body>
     <style> 
+    
         header{
-            position: inherit;
+            position: fixed;
             height: 80px;
             width: auto;
             left: 0px;

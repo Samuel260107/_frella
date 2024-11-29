@@ -240,6 +240,7 @@ font-weight: 200;
 }
 
 .content-wrapper {
+    margin-top: 80px;
     display: flex;
     justify-content: flex-start; /* Ajusta o layout para começar à esquerda */
 }
