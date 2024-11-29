@@ -2,45 +2,6 @@
 require_once $_SERVER['DOCUMENT_ROOT'] . '/_frella/assets/php/functions.php';
 $posts = getPost1();
 ?>
-<style>
-.post-container {
-    border: 1px solid #ddd;
-    padding: 20px;
-    margin-bottom: 20px;
-    background-color: #f9f9f9;
-    border-radius: 5px;
-}
-
-.post-header {
-    display: flex;
-    align-items: center;
-    margin-bottom: 15px;
-}
-
-.post-img {
-    width: 200px; /* Deixa a imagem ocupar toda a largura do post */
-    max-width: 600px; /* Define um tamanho máximo para não extrapolar */
-    height: auto; /* Mantém a proporção da imagem */
-    margin-bottom: 15px;
-}
-
-.post-container p {
-    font-size: 1.2rem; /* Aumenta o tamanho do texto do post */
-    line-height: 1.6;
-}
-.user-name {
-    font-size: 1.5rem; /* Aumenta o tamanho do nome */
-    font-weight: bold; /* Deixa o texto em negrito */
-}
-
-.user-username {
-    font-size: 1.2rem; /* Define o tamanho do username */
-    color: #ffffff; /* Cor do texto */
-    margin-top: 5px; /* Espaço entre o nome e o username */
-    text-align: center; /* Centraliza o username */
-}
-
-</style>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <a class="navbar-brand" href="?home">
     <img src="#" alt="" height="28">
@@ -57,7 +18,7 @@ $posts = getPost1();
                 </div>
             </div>
             <div class="foto">
-    <img src="assets/img/profile/<?=$user['profile_pic']?>" class="profile-pic" style="height:150px;width:150px" alt="Imagem do perfil">
+    <img src="assets/img/profile/<?=$user['profile_pic']?>" class="profile-pic" alt="Imagem do perfil">
     <a href="#" class="ms-2 edit-icon" data-field="profile_pic"><i class="fas fa-pencil-alt"></i></a>
 </div>
 <div class="perfil">
@@ -70,8 +31,7 @@ $posts = getPost1();
         </div>
         <!-- Nome de usuário -->
         <div class="user-name">
-            <input type="text" class="form-control" id="name" name="name" 
-            value="<?=$user['first_name']?> <?=$user['last_name']?>">
+            <a><?=$user['first_name']?> <?=$user['last_name']?></a>
         </div>
     </div>
     <!-- Seção Cinza -->
@@ -104,23 +64,98 @@ $posts = getPost1();
 </div>
     </div>
     <h1 class="portfolio-title">Portifolio</h1>
-        <?php if (!empty($posts)): ?>
-            <?php foreach ($posts as $post): ?>
-                <div class="post-container" height="100px">
-                    <div class="post-header">
-                    <?php if (!empty($post['post_img'])): ?>
-                        <img class="post-img" src="assets/img/posts/<?= $post['post_img'] ?>" alt="Imagem do post">
-
-                    <?php endif; ?>
-                </div>
-            <?php endforeach; ?>
-        <?php else: ?>
-            <p>Nenhum post encontrado.</p>
-        <?php endif; ?>
-    </div>
-    <a href="?post"><button>Mostrar</button></a>
+    <div class="post-container">
+    <?php foreach ($posts as $post): ?>
+        <div class="post-cntainer"> <!-- Deve ser 'post-container' -->
+            <div class="post-header">
+                <?php if (!empty($post['post_img'])): ?>
+                    <img class="post-img" src="assets/img/posts/<?= $post['post_img'] ?>" alt="Imagem do post">
+                <?php endif; ?>
+            </div>
+        </div>
+    <?php endforeach; ?>
+</div>
+    <a href="?post"><button class="mostrar">Mostrar</button></a>
 </div>
 <style>
+ .post-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 20px;
+    background-color: #d2d2d2;
+    width: 64.2%;
+    margin-left: 11.25%;
+    padding: 30px; /* Define uma altura mínima */
+    overflow: hidden; /* Evita transbordamento de conteúdo */
+    border-radius: 8px; /* Deixa as bordas arredondadas */
+}
+
+.post-cntainer { /* Verifique o erro de digitação */
+    flex: 1 1 calc(45% - 20px);
+    border-radius: 5px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-height: 150px; /* Limita a altura máxima do post */
+    overflow: hidden; /* Corta qualquer conteúdo extra */
+}
+
+.post-img {
+    width: 100%;
+    height: auto;
+    max-height: 300px; /* Limita a altura da imagem */
+    object-fit: cover; /* Ajusta o corte da imagem para manter a proporção */
+    margin-bottom: 10px;
+}
+.post-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.post-img {
+    width: 200px; /* Deixa a imagem ocupar toda a largura do post */
+    max-width: 600px; /* Define um tamanho máximo para não extrapolar */
+    height: auto; /* Mantém a proporção da imagem */
+    margin-bottom: 15px;
+}
+
+.post-container p {
+    font-size: 1.2rem; /* Aumenta o tamanho do texto do post */
+    line-height: 1.6;
+}
+.user-name {
+    font-size: 1.5rem; /* Aumenta o tamanho do nome */
+    font-weight: bold; /* Deixa o texto em negrito */
+}
+
+.user-username {
+    font-size: 1.2rem; /* Define o tamanho do username */
+    color: #ffffff; /* Cor do texto */
+    margin-top: 5px; /* Espaço entre o nome e o username */
+    text-align: center; /* Centraliza o username */
+}
+    .mostrar{
+        position: relative;
+    background-color: #E03C31; /* Cor de fundo vermelha */
+    color: white; /* Cor da fonte branca */
+    padding: 5px; /* Espaçamento interno */
+    text-align: center; /* Centraliza o texto */
+    width: 77.7%; /* Largura do título igual à largura do conteúdo */
+    margin-left: 11.25%; /* Margem à esquerda para alinhar com o conteúdo */
+    margin-right: 20px; 
+    margin-top: -30px;
+    border: none;
+    }
+    .post-container{
+        background-color: #d2d2d2;
+        width: 64.2%;
+        margin-left: 11.25%;
+        height: 300px;
+        padding: 30px 100px 30px 100px;
+    }
      .fundo {
     position: absolute;
     top: 0;
@@ -133,14 +168,17 @@ $posts = getPost1();
     position: relative;
     z-index: 100; /* Garante que o campo de arquivo tenha prioridade sobre outros elementos */
 }
-    .post-img{
-        width: 100px;
-    }
-
+.post-img {
+    width: 100%; /* Ocupa toda a largura do post */
+    max-width: 250px; /* Define um tamanho máximo */
+    height: auto; /* Mantém a proporção da imagem */
+    margin-bottom: 10px;
+}
     
     .profile-pic{
-        width: 400px;
-        height: 200px;
+        width: 240px;
+        height: 240px;
+        margin-top: -60px;
         border-radius: 50%;
         border: 3px solid #D9D9D9;
         object-fit: cover;
@@ -240,15 +278,16 @@ $posts = getPost1();
     flex-direction: column; /* Organiza o conteúdo em colunas */
     align-items: center; /* Centraliza os elementos no eixo principal */
     justify-content: center; /* Centraliza no eixo cruzado */
-    padding: 10px; /* Adiciona um espaçamento interno */
+    padding: 40px 20px 20px 20px; /* Adiciona um espaçamento interno */
     color: white;
+    margin-top: -30px;
 }
 .perfil2 {
     position: relative;
     height: auto; /* Ajusta automaticamente para o conteúdo */
     background-color: #d2d2d2;
     display: flex;
-    justify-content: space-between;
+    justify-content:space-between;
     align-items: center;
     padding: 10px 20px; /* Espaçamento interno */
     flex-wrap: wrap; /* Permite que os campos sejam exibidos em múltiplas linhas, se necessário */
@@ -288,8 +327,7 @@ $posts = getPost1();
     color: white; /* Cor da fonte branca */
     padding: 5px; /* Espaçamento interno */
     text-align: center; /* Centraliza o texto */
-    margin-top: -100PX;
-    border-radius: 5px; /* Bordas arredondadas */
+    margin-top: -100PX; /* Bordas arredondadas */
     width: calc(79.75% - 40px); /* Largura do título igual à largura do conteúdo */
     margin-left: 11.25%; /* Margem à esquerda para alinhar com o conteúdo */
     margin-right: 20px; /* Margem à direita para alinhar com o conteúdo */
