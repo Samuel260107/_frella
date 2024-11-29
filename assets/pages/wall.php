@@ -12,26 +12,33 @@ $users = getUsers();
         <?php if (!empty($posts)): ?>
             <?php foreach ($posts as $post): ?>
                 <div class="post-container">
-                    <div class="post-header">
-                        <img src="assets/img/profile/<?= $post['profile_pic'] ?>" alt="Foto de perfil" width="50">
-                        <div>
-                            <strong><?= $post['first_name'] . ' ' . $post['last_name'] ?></strong>
-                            <p>@<?= $post['username'] ?></p>
-                        </div>
-                    </div>
-                    <?php if (!empty($post['post_img'])): ?>
-                        <img class="post-img open-modal" src="assets/img/posts/<?= $post['post_img'] ?>" width="500px" alt="Imagem do post" 
-                             data-img="assets/img/posts/<?= $post['post_img'] ?>" 
-                             data-type="Post de <?= $post['first_name'] ?>" 
-                             data-project="<?= $post['post_text'] ?>" 
-                             data-profile-pic="assets/img/profile/<?= $post['profile_pic'] ?>"
-                             data-profile-link="?profile=<?= $post['user_id'] ?>"> <!-- Adicionando link do perfil -->
-                        <p><?= $post['post_text'] ?></p>
-                    <?php endif; ?>
-                    <p><small>Postado em: <?= $post['created_at'] ?></small></p>
+                <div class="post-image-wrapper">
+    <div class="post-overlay">
+        <div class="post-details">
+        <p><?= $post['post_text'] ?></p>
+            </div>
+        <div class="post11">
+            <div class="k">
+            <strong><?= $post['first_name'] . ' ' . $post['last_name'] ?></strong>
+            <p><?= $post['post_type'] ?></p>
+            </div>
+            <div class="kk">
+            <img width="50px" height="50px" src="assets/img/profile/<?= $post['profile_pic'] ?>"></p>
+            </div>
+        </div>
+    </div>
+    <?php if (!empty($post['post_img'])): ?>
+        <img class="post-img open-modal" src="assets/img/posts/<?= $post['post_img'] ?>" width="500px" alt="Imagem do post" 
+             data-img="assets/img/posts/<?= $post['post_img'] ?>" 
+             data-type="Post de <?= $post['first_name'] ?>" 
+             data-project="<?= $post['post_text'] ?>" 
+             data-profile-pic="assets/img/profile/<?= $post['profile_pic'] ?>"
+             data-profile-link="?profile=<?= $post['user_id'] ?>">
+    <?php endif; ?>
+</div>
 
                     <!-- Bloco para interações: curtir e contagem de curtidas -->
-                    <div class="interactions">
+                    <!-- <div class="interactions">
                         <form action="assets/php/action.php?<?= isPostLiked($post['id']) ? 'unlike' : 'like' ?>" method="POST">
                             <input type="hidden" name="post_id" value="<?= $post['id'] ?>">
                             <button type="submit" class="like-button"><?= isPostLiked($post['id']) ? 'Descurtir' : 'Curtir' ?></button>
@@ -45,7 +52,9 @@ $users = getUsers();
                             <button type="submit" class="delete-button">Excluir Post</button>
                         </form>
                     <?php endif; ?>
-                </div>
+                </div> -->
+                <br>
+                <br>
             <?php endforeach; ?>
         <?php else: ?>
             <p>Nenhum post encontrado.</p>
@@ -158,6 +167,90 @@ font-optical-sizing: auto;
 font-weight: <weight>;
 font-style: normal;
 }
+.post-image-wrapper {
+    position: relative; /* Define a posição para que os elementos internos possam ser posicionados em relação a ela */
+    width: 800px;
+    height: 351px;
+    margin-left: 40PX;
+    border-radius: 35px 0px 35px 0px ;
+    overflow: hidden; /* Oculta qualquer conteúdo que ultrapasse os limites */
+}
+
+.post-overlay {
+    border-radius: 30px 0 30px 0; 
+    position: absolute;
+    border: 5px solid #fff;
+    top: 0;
+    left: 0;
+    width: 99%;
+    height: 97%;
+    background: linear-gradient(
+        to bottom, 
+        rgba(217, 217, 217, 0.3), /* Parte superior mais clara */
+        rgba(0, 0, 0, 0.4)  /* Parte inferior mais escura */
+    ); /* Fundo semi-transparente */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white; /* Texto branco para contraste */
+    opacity: 1; /* Exibe a camada o tempo todo */
+}
+
+.post-image-wrapper:hover .post-overlay {
+    opacity: 1; /* Exibe a camada ao passar o mouse */
+}
+.post11{
+    display: flex;
+    position: absolute;
+    bottom: 20px; /* Alinha o elemento à parte inferior */
+    right: 30px; /* Alinha o elemento à parte direita */
+    text-align: left; /* Mantém o alinhamento do texto */
+    text-underline-position: from-font;
+    text-decoration-skip-ink: none;
+}
+.post-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* A imagem será cortada, mas preencherá todo o espaço do container */
+}
+.post11 img{
+    border-radius: 50%;
+}
+.k strong{
+    font-size: 20px;
+    margin-right: 10px;
+    
+}
+.k p{
+    margin-right: 10px;
+    margin-top: -5px;
+    font-family: Inter;
+font-size: 10px;
+font-weight: 400;
+line-height: 20.57px;
+text-align: left;
+text-underline-position: from-font;
+text-decoration-skip-ink: none;
+
+}
+.post-details {
+    position: absolute; /* Torna o elemento posicionado em relação ao pai */
+    bottom: 10px; /* Define a posição a 10px da parte inferior */
+    left: 30px; /* Define a posição a 10px da borda esquerda */
+    background-color: rgba(0, 0, 0, 0.0); /* Fundo escuro semi-transparente para contraste */
+    padding: 5px 10px; /* Adiciona um pequeno preenchimento ao redor do texto */
+    border-radius: 5px; /* Bordas arredondadas */
+    color: white; /* Garante que o texto fique visível */
+    font-size: 30px; /* Ajuste o tamanho do texto conforme necessário */
+    font-family: Inter;
+    font-size: 33px;
+    font-weight: 400;
+    line-height: 47.2px;
+    text-align: left;
+    text-underline-position: from-font;
+    text-decoration-skip-ink: none;
+
+}
     .bp{
         display: flex;
     }
@@ -223,9 +316,10 @@ font-weight: 200;
         justify-content: space-between;
     }
     .posts {
-        flex: 3;
-        margin-right: 20px;
-    }
+    flex: 3;
+    margin-right: 20px;
+    width: 70%;  /* Ajuste a largura aqui */
+}
     .profiles {
     position: fixed; /* Fixa a seção no canto direito */
     top: 100px; /* Define um espaço de 20px do topo */
@@ -240,7 +334,7 @@ font-weight: 200;
 }
 
 .content-wrapper {
-    margin-top: 80px;
+    margin-top: 100px;
     display: flex;
     justify-content: flex-start; /* Ajusta o layout para começar à esquerda */
 }

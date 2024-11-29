@@ -104,8 +104,9 @@ if (isset($_GET['profile'])) {
     </div>
 <style>
     body{
+
         background-color:#FFFCEA;
-        margin: 0;
+        margin-top: 110px;
         padding: 0;
     }
     .fundo{
