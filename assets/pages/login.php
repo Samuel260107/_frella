@@ -114,7 +114,7 @@ form{
     margin: 7px;
     height: 35px;
     width: 90%;
-    border: solid #B1B1B1;
+    border: 1px solid #B1B1B1;
     font-size: 20px;
     padding: 8px 15px;
     background-color: #fff;
