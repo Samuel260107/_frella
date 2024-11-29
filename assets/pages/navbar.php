@@ -15,15 +15,33 @@
                 </div>
             </div>
             <div class="p2">
-                <a href="?meuperfill"><img class="img1" src="/_frella/assets/img/navbar/perfil.png" alt=""></a>
+            <div class="perfil-container">
+    <a href="?meuperfill">
+        <img class="img1" src="/_frella/assets/img/navbar/perfil.png" alt="Perfil">
+    </a>
+    <form method="get" class="logout-form">
+        <button type="submit" name="logout">Sair</button>
+    </form>
+</div>
                 <a href="" id="addPostBtn">
                     <img class="img2" src="/_frella/assets/img/navbar/mais.png"></img>
                 </a>
-                <a href=""><img class="img3" src="/_frella/assets/img/navbar/conversas.png"></img></a>
+                <a href="#" id="openChatModal">
+                <img class="img3" src="/_frella/assets/img/navbar/conversas.png" alt="Chat">
+            </a>
                 <a href="#"><img class="img4" src="/_frella/assets/img/navbar/sino.png"></a>
                 <a href="?home"><img class="img5" src="/_frella/assets/img/navbar/logo.png"></img></a>
             </div>
         </header>
+        <div id="chatModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3>Escolha um Usuário para Conversar</h3>
+            <ul class="user-list" id="userList">
+                <!-- Usuários serão carregados aqui -->
+            </ul>
+        </div>
+    </div>
         <div id="postForm" class="post-form hidden">
             <h3>Adicionar Post</h3>
             <form action="assets/pages/add_post.php" method="POST" enctype="multipart/form-data">
@@ -39,6 +57,40 @@
             </form>
         </div>
         <script>
+            document.getElementById('openChatModal').addEventListener('click', function(event) {
+            event.preventDefault();
+            document.getElementById('chatModal').style.display = 'block';
+            loadUserList();  // Carregar a lista de usuários
+        });
+
+        // Fechar Modal
+        document.querySelector('.close').addEventListener('click', function() {
+            document.getElementById('chatModal').style.display = 'none';
+        });
+
+        // Função para carregar a lista de usuários
+        function loadUserList() {
+            // Chamada AJAX para carregar a lista de usuários
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', 'get_users.php', true);
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    const users = JSON.parse(xhr.responseText);
+                    const userList = document.getElementById('userList');
+                    userList.innerHTML = ''; // Limpar a lista antes de adicionar os usuários
+                    
+                    users.forEach(function(user) {
+                        const li = document.createElement('li');
+                        li.textContent = user.username;
+                        li.addEventListener('click', function() {
+                            window.location.href = `chat.php?user=${user.id}`; // Redireciona para o chat com o usuário
+                        });
+                        userList.appendChild(li);
+                    });
+                }
+            };
+            xhr.send();
+        }
             document.getElementById('addPostBtn').addEventListener('click', function(event) {
                 event.preventDefault();
                 var postForm = document.getElementById('postForm');
@@ -51,7 +103,27 @@
         </script>
     </body>
     <style> 
-    
+    .perfil-container {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Espaço entre o ícone e o botão */
+}
+
+.logout-form {
+    margin: 0; /* Remove margens do formulário */
+}
+
+.logout-form button {
+    background-color: transparent; /* Sem fundo */
+    color: #fff; /* Cor do texto */
+    border: none; /* Sem borda */
+    cursor: pointer;
+    font-size: 14px; /* Tamanho do texto */
+}
+
+.logout-form button:hover {
+    text-decoration: underline; /* Destacar o botão ao passar o mouse */
+}
         header{
             position: fixed;
             height: 80px;

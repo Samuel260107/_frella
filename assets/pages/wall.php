@@ -75,7 +75,7 @@ $users = getUsers();
     <div class="profiles">
         <a href="?meuperfill">
             <div class="nj">
-                <img src="assets/img/profile/<?= $user['profile_pic'] ?>" alt="Foto de perfil" width="70" class="suafoto">
+                <img src="assets/img/profile/<?= $user['profile_pic'] ?>" alt="Foto de perfil" width="70" height="70" class="suafoto">
                 <div class="nj1">
                 <div class="nj2">
                 <?= $user['first_name'] ?> <?= $user['last_name'] ?>
