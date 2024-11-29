@@ -90,7 +90,7 @@ if (!function_exists('getUsers')) {
         global $db; 
         
         // Prepara a consulta SQL
-        $query = "SELECT id, first_name, last_name, username, profile_pic FROM users ORDER BY id DESC LIMIT 10";
+        $query = "SELECT id, first_name, last_name, username, profile_pic FROM users ORDER BY id DESC LIMIT 4";
         
         // Executa a consulta
         $result = $db->query($query);

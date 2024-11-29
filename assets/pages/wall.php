@@ -4,7 +4,9 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/_frella/assets/php/functions.php';
 $posts = getPost();
 $users = getUsers();
 ?>
-
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
 <div class="content-wrapper">
     <div class="posts">
         <?php if (!empty($posts)): ?>
@@ -65,14 +67,15 @@ $users = getUsers();
         <a href="?meuperfill">
             <div class="nj">
                 <img src="assets/img/profile/<?= $user['profile_pic'] ?>" alt="Foto de perfil" width="70" class="suafoto">
-                <p class="nj1">
-                <p class="nj2">
+                <div class="nj1">
+                <div class="nj2">
                 <?= $user['first_name'] ?> <?= $user['last_name'] ?>
-                </p>
-                <p class="nj3">
+                </div>
+                <br>
+                <div class="nj3">
                 @<?= $user['username'] ?>
-                </p>
-        </p>
+                </div>
+                </div>
             </div>
         </a>
 
@@ -84,8 +87,12 @@ $users = getUsers();
                             <img src="assets/img/profile/<?= $profile_user['profile_pic'] ?>" alt="Foto de perfil" width="50" height="50">
                             <div class="bp">
                                 <div class="bp1">
+                                    <div class="bp1n">
                                 <strong><?= $profile_user['first_name'] . ' ' . $profile_user['last_name'] ?></strong>
+                                    </div>
+                                <div class="bp1e">
                                 <p>@<?= $profile_user['username'] ?></p>
+                                </div>
                 </div>
 
                                 <?php if (isFollowing($user['id'], $profile_user['id'])): ?>
@@ -145,8 +152,30 @@ $users = getUsers();
 </script>
 
 <style>
+    *{
+font-family: "Inter", sans-serif;
+font-optical-sizing: auto;
+font-weight: <weight>;
+font-style: normal;
+}
     .bp{
         display: flex;
+    }
+    .bp1n{
+        margin-top: 20px;
+        color: white;
+    }
+    .bp1e{
+        color: rgba(255, 255, 255, 1);
+        font-family: Inter;
+        margin-top: -10px;
+font-weight: 200;
+
+    }
+    .nj3{
+        color: rgba(255, 255, 255, 1);
+        font-family: Inter;
+font-weight: 200;
     }
     .btns{
         border: none;
@@ -168,20 +197,20 @@ $users = getUsers();
         display: flex;
         align-items: center;
         padding: 10px;
+        
     }
     .nj1{
-        margin-left: 10px
+        margin-left: 40px
     }
     .nj2{
         color: white;
         font-family: Inter;
     font-size: 20px;
     font-weight: 600;
-    line-height: 36.31px;
-    text-align: left;
-    text-underline-position: from-font;
-    text-decoration-skip-ink: none;
-
+    margin-bottom: -13px;
+    }
+    .bp1{
+        margin-right: 20px;
     }
     html{
         background-color: #FFA609;
@@ -198,23 +227,35 @@ $users = getUsers();
         margin-right: 20px;
     }
     .profiles {
-        flex: 1.3;
-        padding: 30px;
-        background-color: rgba(217, 217, 217, 0.5); /* Ajuste da opacidade para 50% */
-        height: 50%;
-        border: #fff solid 4px;
-        border-radius: 30px 0px 30px 0px;
-    }
+    position: fixed; /* Fixa a seção no canto direito */
+    top: 100px; /* Define um espaço de 20px do topo */
+    right: 20px; /* Muda para a direita da tela */
+    width: 300px; /* Define a largura da seção */
+    padding: 30px;
+    background-color: rgba(217, 217, 217, 0.5); /* Ajuste da opacidade para 50% */
+    height: 73%; /* A altura é ajustada para preencher quase toda a tela */
+    border: #fff solid 4px;
+    border-radius: 30px 0px 30px 0px;
+    z-index: 100; /* Garante que a seção fique acima de outros conteúdos */
+}
+
+.content-wrapper {
+    display: flex;
+    justify-content: flex-start; /* Ajusta o layout para começar à esquerda */
+}
     .post-container, .profile-container {
         margin-bottom: 20px;
     }
     .profile-container {
         display: flex;
         align-items: center;
+        color: white;
+        margin-top: 30px;
     }
     .profile-container img {
         border-radius: 50%;
-        margin-right: 10px;
+        margin-right: 30px;
+        margin-top: 15px;
     }
     /* CSS para o modal */
     .modal {
