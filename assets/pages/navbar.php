@@ -1,3 +1,7 @@
+<?php global $user; 
+require_once $_SERVER['DOCUMENT_ROOT'] . '/_frella/assets/php/functions.php';
+$users = getUsers1();
+?>
 <!DOCTYPE html>
 <html lang="pt-br">
     <head>
@@ -8,12 +12,19 @@
     </head>
     <body>
         <header>
-            <div class="p1">
-                <img class="search-button" src="/_frella/assets/img/navbar/pesquisa.png"></img>
-                <div class="search-container">
-                    <input type="text" class="search-bar" placeholder="Pesquisar">
+        <div class="p1">
+                <img class="search-button" src="/_frella/assets/img/navbar/pesquisa.png">
+            </img>
+            <div class="search-container">
+                    <input type="text" class="search-bar" id="search-bar" placeholder="Pesquisar">
+                    <div id="userSearchResults">
+                <!-- Resultados da pesquisa serão exibidos aqui -->
+            </div>
                 </div>
             </div>
+            <div id="userSearchResults">
+            <!-- Resultados da pesquisa serão exibidos aqui -->
+        </div>
             <div class="p2">
             <div class="perfil-container">
     <a href="?meuperfill">
@@ -34,14 +45,13 @@
             </div>
         </header>
         <div id="chatModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h3>Escolha um Usuário para Conversar</h3>
-            <ul class="user-list" id="userList">
-                <!-- Usuários serão carregados aqui -->
-            </ul>
-        </div>
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <ul class="user-list" id="userList">
+            <!-- Usuários serão carregados aqui -->
+        </ul>
     </div>
+</div>
         <div id="postForm" class="post-form hidden">
             <h3>Adicionar Post</h3>
             <form action="assets/pages/add_post.php" method="POST" enctype="multipart/form-data">
@@ -57,6 +67,60 @@
             </form>
         </div>
         <script>
+            
+            document.getElementById('chatModal').addEventListener('click', function(event) {
+    if (event.target === this) {
+        this.style.display = 'none';
+    }
+});
+       const users = <?php echo json_encode($users, JSON_UNESCAPED_UNICODE); ?>;
+
+            // Exibir usuários ao carregar a página
+            document.getElementById('search-bar').addEventListener('input', function(event) {
+    const searchTerm = event.target.value.toLowerCase();
+    const resultsContainer = document.getElementById('userSearchResults');
+    resultsContainer.innerHTML = ''; // Limpar resultados anteriores
+
+    if (searchTerm.trim() !== '') { // Apenas pesquisar se houver texto
+        users.forEach(function(user) {
+            if (user.username.toLowerCase().includes(searchTerm)) {
+                const userElement = document.createElement('div');
+                userElement.textContent = user.username;
+                userElement.addEventListener('click', function() {
+                    window.location.href = `profile.php?user=${user.id}`;
+                });
+                resultsContainer.appendChild(userElement);
+            }
+        });
+
+        if (resultsContainer.innerHTML === '') {
+            resultsContainer.innerHTML = '<div>Nenhum usuário encontrado.</div>';
+        }
+    }
+});
+
+            // Pesquisar usuários
+            document.getElementById('search-bar').addEventListener('input', function(event) {
+                const searchTerm = event.target.value.toLowerCase();
+                const resultsContainer = document.getElementById('userSearchResults');
+                resultsContainer.innerHTML = ''; // Limpar resultados anteriores
+                
+                users.forEach(function(user) {
+                    if (user.username.toLowerCase().includes(searchTerm)) {
+                        const userElement = document.createElement('div');
+                        userElement.textContent = user.username;
+                        userElement.addEventListener('click', function() {
+                            window.location.href = `?profile=${user.id}`;
+                        });
+                        resultsContainer.appendChild(userElement);
+                    }
+                });
+
+                if (resultsContainer.innerHTML === '') {
+                    resultsContainer.innerHTML = 'Nenhum usuário encontrado.';
+                }
+            });
+
             document.getElementById('openChatModal').addEventListener('click', function(event) {
             event.preventDefault();
             document.getElementById('chatModal').style.display = 'block';
@@ -68,29 +132,110 @@
             document.getElementById('chatModal').style.display = 'none';
         });
 
-        // Função para carregar a lista de usuários
         function loadUserList() {
-            // Chamada AJAX para carregar a lista de usuários
-            const xhr = new XMLHttpRequest();
-            xhr.open('GET', 'get_users.php', true);
-            xhr.onload = function() {
-                if (xhr.status === 200) {
-                    const users = JSON.parse(xhr.responseText);
-                    const userList = document.getElementById('userList');
-                    userList.innerHTML = ''; // Limpar a lista antes de adicionar os usuários
-                    
-                    users.forEach(function(user) {
-                        const li = document.createElement('li');
-                        li.textContent = user.username;
-                        li.addEventListener('click', function() {
-                            window.location.href = `chat.php?user=${user.id}`; // Redireciona para o chat com o usuário
-                        });
-                        userList.appendChild(li);
-                    });
-                }
-            };
-            xhr.send();
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', '/_frella/assets/pages/get_users.php', true); // Altere para o caminho correto do seu script PHP
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+            const users = JSON.parse(xhr.responseText);
+            const userList = document.getElementById('userList');
+            userList.innerHTML = '';
+
+            users.forEach(user => {
+                const userItem = document.createElement('li');
+                userItem.textContent = user.username;
+                userItem.addEventListener('click', function() {
+    openChatWindow(user.id, user.username);
+});
+                userList.appendChild(userItem);
+            });
         }
+    };
+    xhr.send();
+}
+function closeChatWindow(button) {
+    const chatWindow = button.closest('.chat-window');
+    chatWindow.style.display = 'none';
+}
+function openChatWindow(userId, username) {
+    const existingChat = document.querySelector(`.chat-window[data-user-id="${userId}"]`);
+    if (existingChat) {
+        existingChat.style.display = 'block'; // Mostra a janela existente
+        return;
+    }
+
+    const chatWindow = document.createElement('div');
+    chatWindow.className = 'chat-window';
+    chatWindow.setAttribute('data-user-id', userId); // Identifica o usuário
+    chatWindow.innerHTML = `
+        <div class="chat-header">
+            <span>Chat com ${username}</span>
+            <button class="close-chat" onclick="closeChatWindow(this)">×</button>
+        </div>
+        <div class="chat-messages" id="chatMessages${userId}"></div>
+        <textarea class="chat-input" id="chatInput${userId}" placeholder="Digite sua mensagem..."></textarea>
+        <button onclick="sendMessage(${userId})">Enviar</button>
+    `;
+    document.body.appendChild(chatWindow);
+    loadMessages(userId);
+}
+function sendMessage(receiverId) {
+    const input = document.getElementById(`chatInput${receiverId}`);
+    const message = input.value.trim();
+    
+    if (message) {
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', '/_frella/assets/pages/send_message.php', true);  // Envia para o PHP que processa a mensagem
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                const messagesContainer = document.getElementById(`chatMessages${receiverId}`);
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'message me';
+                messageDiv.textContent = `Você: ${message}`;
+                messagesContainer.appendChild(messageDiv);
+
+                input.value = '';  // Limpar o campo de entrada
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;  // Rola para o final da conversa
+            }
+        };
+        
+        // Envia os dados para o PHP processar
+        xhr.send(`receiver_id=${receiverId}&message=${encodeURIComponent(message)}`);
+    }
+}
+function loadMessages(userId) {
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', `/_frella/assets/pages/get_messages.php?userId=${userId}`, true);
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+            const messages = JSON.parse(xhr.responseText);
+            const messagesContainer = document.getElementById(`chatMessages${userId}`);
+            messagesContainer.innerHTML = '';
+            messages.forEach(msg => {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = msg.sender === 'me' ? 'message me' : 'message other';
+                messageDiv.textContent = msg.sender === 'me' 
+                    ? `Você: ${msg.message}` 
+                    : `${msg.sender}: ${msg.message}`;
+                messagesContainer.appendChild(messageDiv);
+            });
+            messagesContainer.scrollTop = messagesContainer.scrollHeight; // Rola para o final
+        }
+    };
+    xhr.send();
+}
+
+// Atualizar mensagens automaticamente a cada 5 segundos
+setInterval(() => {
+    const openChatWindows = document.querySelectorAll('.chat-window[data-user-id]');
+    openChatWindows.forEach(chatWindow => {
+        const userId = chatWindow.getAttribute('data-user-id');
+        loadMessages(userId);
+    });
+}, 5000);
+
             document.getElementById('addPostBtn').addEventListener('click', function(event) {
                 event.preventDefault();
                 var postForm = document.getElementById('postForm');
@@ -103,6 +248,75 @@
         </script>
     </body>
     <style> 
+    .chat-window {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 400px;
+    max-width: 90%; /* Ajusta para telas menores */
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 200; /* Certifique-se de que esteja acima de outros elementos */
+    padding: 20px;
+}
+.chat-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+}
+.chat-messages {
+    max-height: 300px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #f9f9f9;
+}
+.chat-input {
+    width: calc(100% - 90px); /* Espaço para o botão Enviar */
+    margin-right: 10px;
+}
+.chat-window button {
+    cursor: pointer;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+.chat-window button:hover {
+    background-color: #0056b3;
+}
+.close-chat {
+    background-color: transparent;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+}
+    .post-form {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: 1px solid #ccc;
+    padding: 20px;
+    width: 100%;
+    max-width: 400px;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 100; /* Certifique-se de que o z-index seja maior que o da navbar */
+}
+
+.hidden {
+    display: none;
+}
     .perfil-container {
     display: flex;
     align-items: center;
@@ -120,6 +334,13 @@
     cursor: pointer;
     font-size: 14px; /* Tamanho do texto */
 }
+
+
+#userSearchResults div {
+    padding: 10px;
+    cursor: pointer;
+}
+
 
 .logout-form button:hover {
     text-decoration: underline; /* Destacar o botão ao passar o mouse */

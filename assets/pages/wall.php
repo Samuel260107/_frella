@@ -125,6 +125,9 @@ $users = getUsers();
         <?php endif; ?>
     </div>
 </div>
+
+
+
 <!-- JavaScript para o modal -->
 <script>
     // Função para abrir o modal
@@ -167,6 +170,7 @@ font-optical-sizing: auto;
 font-weight: <weight>;
 font-style: normal;
 }
+
 .post-image-wrapper {
     position: relative; /* Define a posição para que os elementos internos possam ser posicionados em relação a ela */
     width: 800px;

@@ -75,16 +75,13 @@ if (isset($_GET['profile'])) {
                             <div class="imgport">
                                 <!-- Verifica se o post tem imagem -->
                                 <?php if (!empty($post['post_img'])): ?>
-                                    <img class="post-img" src="assets/img/posts/<?= $post['post_img'] ?>" alt="Imagem do post" width="100">
+                                    <img class="post-img" src="assets/img/posts/<?= $post['post_img'] ?>" alt="Imagem do post" width="200" height="200">
+                                    <p><?= $post['post_text'] ?></p>
+                                    <p><small><?= $post['created_at'] ?></small></p>
                                 <?php endif; ?>
-                                <!-- Exibe o texto do post -->
+                                
                             </div>
-                            <div class="textport">
-                                <p><?= $post['post_text'] ?></p>
-                            </div>
-                            <div class="textport2">
-                                <p><small><?= $post['created_at'] ?></small></p>
-                            </div>                            
+                              
                         </div>
                     </div>
                 <?php endforeach; ?>
@@ -165,8 +162,8 @@ if (isset($_GET['profile'])) {
         cursor: pointer;  
     }
     .imgdeixar{
-        width: 55px;
-        height: 55px;
+        width: 45px;
+        height: 45px;
         border: none;
         border: none;
         color: transparent;

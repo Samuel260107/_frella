@@ -8,7 +8,7 @@ if (session_status() === PHP_SESSION_NONE) {
 if (isset($_SESSION['Auth'])) {
     $user = getUser($_SESSION['userdata']['id']);
 } 
-// Verifica as páginas baseadas nos parâmetros na URL
+
 $pagecount = count($_GET);
 
 if (!$pagecount || isset($_GET['signup'])) {
@@ -49,5 +49,19 @@ if (isset($_SESSION['Auth'])) {
         showPage('logout');
         exit();
     }
+    if (!$pagecount || isset($_GET['get_users'])) {
+        showPage('get_users');
+        exit();
+    }
+    if (!$pagecount || isset($_GET['search_users'])) {
+        showPage('search_users');
+        exit();
+    }
+    if (!$pagecount || isset($_GET['send_message'])) {
+        showPage('send_message');
+        exit();
+    }
+
+
 }
 ?>

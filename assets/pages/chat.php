@@ -1,29 +1,25 @@
 <?php
+// Inclua a conexão com o banco de dados e a verificação de sessão
+include $_SERVER['DOCUMENT_ROOT'] . '/_frella/assets/php/functions.php';
 session_start();
-require_once '../php/config.php'; // Inclua o arquivo de configuração do banco de dados
-require_once '../php/functions.php'; // Inclua as funções
 
-// Verifica se o usuário está logado
-if (!isset($_SESSION['userdata']['id'])) {
-    echo "Erro: Usuário não logado.";
-    exit;
+// Verifique se o usuário está logado e se o parâmetro 'user' foi passado na URL
+if (!isset($_SESSION['user_id']) || !isset($_GET['user'])) {
+    header('Location: login.php');
+    exit();
 }
 
-// Pega o ID do usuário logado
-$logged_user_id = $_SESSION['userdata']['id'];
+$logged_in_user_id = $_SESSION['user_id'];
+$other_user_id = $_GET['user'];
 
-// Pega o ID do usuário destinatário da URL (ex: chat.php?user=2)
-$receiver_id = isset($_GET['user']) ? $_GET['user'] : null;
+// Obtenha o nome de usuário do outro usuário
+$query = "SELECT username FROM users WHERE id = $other_user_id";
+$result = mysqli_query($conn, $query);
+$other_user = mysqli_fetch_assoc($result);
 
-if ($receiver_id) {
-    // Busca as mensagens trocadas entre o usuário logado e o destinatário
-    $stmt = $db->prepare("SELECT * FROM messages WHERE (sender_id = ? AND receiver_id = ?) OR (sender_id = ? AND receiver_id = ?) ORDER BY created_at ASC");
-    $stmt->bind_param("iiii", $logged_user_id, $receiver_id, $receiver_id, $logged_user_id);
-    $stmt->execute();
-    $result = $stmt->get_result();
-} else {
-    echo "Erro: ID do destinatário não especificado.";
-    exit;
+if (!$other_user) {
+    echo "Usuário não encontrado.";
+    exit();
 }
 ?>
 
@@ -32,54 +28,35 @@ if ($receiver_id) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat</title>
-    <link rel="stylesheet" href="style.css"> <!-- Ajuste o caminho do seu arquivo CSS -->
+    <title>Conversa com <?php echo $other_user['username']; ?></title>
 </head>
 <body>
-    <header>
-        <h2>Chat com Usuário <?php echo $receiver_id; ?></h2>
-    </header>
+    <h2>Conversando com: <?php echo $other_user['username']; ?></h2>
 
-    <main>
-        <!-- Exibição das mensagens -->
-        <div class="chat-box">
-            <?php while ($message = $result->fetch_assoc()): ?>
-                <div class="message <?php echo ($message['sender_id'] == $logged_user_id) ? 'sent' : 'received'; ?>">
-                    <p><?php echo htmlspecialchars($message['message']); ?></p>
-                    <span class="timestamp"><?php echo $message['created_at']; ?></span>
-                </div>
-            <?php endwhile; ?>
-        </div>
+    <!-- Exibir mensagens -->
+    <div id="messages">
+        <?php
+        // Obtenha as mensagens entre os dois usuários
+        $query = "SELECT * FROM messages WHERE (sender_id = $logged_in_user_id AND receiver_id = $other_user_id) OR (sender_id = $other_user_id AND receiver_id = $logged_in_user_id) ORDER BY timestamp ASC";
+        $result = mysqli_query($conn, $query);
 
-        <!-- Formulário de envio de mensagem -->
-        <form action="chat.php?user=<?php echo $receiver_id; ?>" method="POST">
-            <textarea name="message_text" rows="3" placeholder="Digite sua mensagem..."></textarea>
-            <button type="submit">Enviar</button>
-        </form>
-    </main>
+        while ($message = mysqli_fetch_assoc($result)) {
+            echo "<div class='message'>";
+            if ($message['sender_id'] == $logged_in_user_id) {
+                echo "<strong>Você:</strong> " . htmlspecialchars($message['message']);
+            } else {
+                echo "<strong>" . htmlspecialchars($other_user['username']) . ":</strong> " . htmlspecialchars($message['message']);
+            }
+            echo "</div>";
+        }
+        ?>
+    </div>
 
-    <script>
-        // Opcional: Automático para rolar até a última mensagem
-        const chatBox = document.querySelector('.chat-box');
-        chatBox.scrollTop = chatBox.scrollHeight;
-    </script>
+    <!-- Formulário para enviar mensagens -->
+    <form action="send_message.php" method="POST">
+        <input type="hidden" name="receiver_id" value="<?php echo $other_user_id; ?>">
+        <textarea name="message" placeholder="Escreva sua mensagem..." required></textarea>
+        <button type="submit">Enviar</button>
+    </form>
 </body>
 </html>
-
-<?php
-// Processa o envio de mensagens
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $message_text = $_POST['message_text'];
-
-    // Verifica se a mensagem não está vazia
-    if (!empty($message_text)) {
-        // Envia a mensagem
-        sendMessage($logged_user_id, $receiver_id, $message_text);
-        // Redireciona para a mesma página para mostrar a nova mensagem
-        header("Location: chat.php?user=$receiver_id");
-        exit;
-    } else {
-        echo "Erro: A mensagem não pode estar vazia.";
-    }
-}
-?>

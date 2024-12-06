@@ -105,6 +105,26 @@ if (!function_exists('getUsers')) {
         }
     }
 }
+if (!function_exists('getUsers1')) {
+    function getUsers1() {
+        global $db; 
+        
+        // Prepara a consulta SQL
+        $query = "SELECT id, first_name, last_name, username, profile_pic FROM users ORDER BY id DESC";
+        
+        // Executa a consulta
+        $result = $db->query($query);
+        
+        // Verifica se a consulta retornou algum resultado
+        if ($result) {
+            // Retorna os resultados como um array associativo
+            return $result->fetch_all(MYSQLI_ASSOC);
+        } else {
+            // Retorna um array vazio em caso de erro
+            return [];
+        }
+    }
+}
 //atualizar o perfil
 if (!function_exists('updateProfile')) {
 function updateProfile($data, $imagedata) {
